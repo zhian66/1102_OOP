@@ -28,9 +28,12 @@ Memory::~Memory() {
 }
 
 void Memory::set(const int POS) {
+	// TYPE: char(1 Byte), short(2 Bytes), int(4 Bytes), String(Until '\0')
 	string TYPE;
 	cin >> TYPE;
-
+	// NOTICE: If the size of value exceeds the size of type, the excess part will be ignored.
+	// NOTICE: If overflow occurs (position + type size > N), please output "Violation Access".
+	// NOTICE: If access postion add type size is bigger than the memory size, we still need to set the data to memory.
 	if (TYPE == "int") {
 		unsigned int input;
 		cin >> input;
@@ -66,8 +69,7 @@ void Memory::set(const int POS) {
 void Memory::get(const int POS) {
 	string TYPE;
 	cin >> TYPE;
-
-
+	
 	if (TYPE == "String") {
 		if (POS > SIZE) {
 			cout << ERROR_MSM << endl;
@@ -87,7 +89,7 @@ void Memory::get(const int POS) {
 			return;
 		}
 		unsigned short output = 0;
-		memcpy(&output, &MEM[POS], sizeof(char)); // copy a to s
+		memcpy(&output, &MEM[POS], sizeof(char)); // copy sizeof(char) address of MEM[POS] to output's address
 		cout << output << endl;
 
 	} else if (TYPE == "short") {
@@ -96,7 +98,7 @@ void Memory::get(const int POS) {
 			return;
 		}
 		unsigned short output = 0;
-		memcpy(&output, &MEM[POS], sizeof(unsigned short)); // copy a to s
+		memcpy(&output, &MEM[POS], sizeof(unsigned short));
 		cout << output << endl;
 
 	} else if (TYPE == "int") {
@@ -105,7 +107,7 @@ void Memory::get(const int POS) {
 			return;
 		}
 		unsigned int output = 0;
-		memcpy(&output, &MEM[POS], sizeof(unsigned int)); // copy a to s
+		memcpy(&output, &MEM[POS], sizeof(unsigned int));
 		cout << output << endl;
 	}
 }
@@ -122,8 +124,10 @@ int main() {
 	for (int line = 0; line < COMMAND; line++) {
 		cin >> command >> postion;
 		if (command == "Set") {
+			// COMMAND: Set <position> <type> <value>
 			mem.set(postion);
 		} else if (command == "Get") {
+			// COMMAND: GET <position> <type>
 			mem.get(postion);
 		}
 	}
